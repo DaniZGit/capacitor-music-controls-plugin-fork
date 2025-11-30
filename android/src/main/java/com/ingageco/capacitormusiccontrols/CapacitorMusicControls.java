@@ -338,7 +338,71 @@ public class CapacitorMusicControls extends Plugin {
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}
+	}
 
+	@PluginMethod()
+	public void updateMetadata(PluginCall call) {
+			JSObject options = call.getData();
+
+			if (this.notification == null || this.mediaSessionCompat == null) {
+					Log.e(TAG, "updateMetadata: notification or mediaSessionCompat is null");
+					call.resolve();
+					return;
+			}
+
+			try {
+					// Update notification via MusicControlsInfos
+					MusicControlsInfos infos = new MusicControlsInfos(options);
+					this.notification.updateNotification(infos);
+
+					MediaMetadataCompat.Builder metadataBuilder = new MediaMetadataCompat.Builder();
+
+					// TRACK
+					if (infos.track != null) {
+							metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, infos.track);
+					}
+
+					// ARTIST
+					if (infos.artist != null) {
+							metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, infos.artist);
+					}
+
+					// ALBUM
+					if (infos.album != null) {
+							metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM, infos.album);
+					}
+
+					// DURATION
+					if (infos.duration > 0) {
+							metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, infos.duration);
+					}
+
+					// COVER
+					if (infos.cover != null) {
+							Bitmap art = getBitmapCover(infos.cover);
+							if (art != null) {
+									metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, art);
+									metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, art);
+							}
+					}
+
+					// Apply metadata
+					mediaSessionCompat.setMetadata(metadataBuilder.build());
+
+					// Update playback state if elapsed provided
+					if (options.has("elapsed")) {
+							long elapsed = infos.elapsed;
+							int state = infos.isPlaying
+									? PlaybackStateCompat.STATE_PLAYING
+									: PlaybackStateCompat.STATE_PAUSED;
+
+							setMediaPlaybackState(state, elapsed);
+					}
+
+					call.resolve();
+			} catch (Exception e) {
+					call.reject("updateMetadata error: " + e.getMessage());
+			}
 	}
 
 	@PluginMethod()

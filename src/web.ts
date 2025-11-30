@@ -1,17 +1,20 @@
-import { WebPlugin } from '@capacitor/core';
+import { WebPlugin } from "@capacitor/core";
 
 import { CapacitorMusicControlsInfo, CapacitorMusicControlsPlugin } from ".";
 
-export class CapacitorMusicControlsWeb extends WebPlugin implements CapacitorMusicControlsPlugin {
+export class CapacitorMusicControlsWeb
+    extends WebPlugin
+    implements CapacitorMusicControlsPlugin
+{
     constructor() {
         super({
-            name: 'CapacitorMusicControls',
-            platforms: ['web'],
+            name: "CapacitorMusicControls",
+            platforms: ["web"],
         });
     }
 
     create(options: CapacitorMusicControlsInfo): Promise<any> {
-        console.log('create', options);
+        console.log("create", options);
         return Promise.resolve(undefined);
     }
 
@@ -20,15 +23,20 @@ export class CapacitorMusicControlsWeb extends WebPlugin implements CapacitorMus
     }
 
     updateDismissable(dismissable: boolean): void {
-        console.log('updateDismissable', dismissable);
+        console.log("updateDismissable", dismissable);
     }
 
     updateElapsed(args: { elapsed: number; isPlaying: boolean }): void {
-        console.log('updateElapsed', args);
+        console.log("updateElapsed", args);
     }
 
     updateIsPlaying(args: { elapsed: number; isPlaying: boolean }): void {
-        console.log('updateIsPlaying', args);
+        console.log("updateIsPlaying", args);
     }
 
+    updateMetadata(options: CapacitorMusicControlsInfo): Promise<void> {
+        console.log("updateMetadata", options);
+
+        return Promise.resolve(undefined);
+    }
 }
