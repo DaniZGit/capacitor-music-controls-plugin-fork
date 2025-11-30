@@ -1,4 +1,4 @@
-import { WebPlugin } from '@capacitor/core';
+import { WebPlugin } from "@capacitor/core";
 import { CapacitorMusicControlsInfo, CapacitorMusicControlsPlugin } from ".";
 export declare class CapacitorMusicControlsWeb extends WebPlugin implements CapacitorMusicControlsPlugin {
     constructor();
@@ -13,4 +13,5 @@ export declare class CapacitorMusicControlsWeb extends WebPlugin implements Capa
         elapsed: number;
         isPlaying: boolean;
     }): void;
+    updateMetadata(options: CapacitorMusicControlsInfo): Promise<void>;
 }

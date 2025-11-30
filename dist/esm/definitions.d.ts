@@ -27,7 +27,7 @@ export interface CapacitorMusicControlsInfo {
 export interface CapacitorMusicControlsPlugin {
     /**
      * Create the media controls
-     * @param options {MusicControlsOptions}
+     * @param options {CapacitorMusicControlsInfo}
      * @returns {Promise<any>}
      */
     create(options: CapacitorMusicControlsInfo): Promise<any>;
@@ -38,7 +38,7 @@ export interface CapacitorMusicControlsPlugin {
     destroy(): Promise<any>;
     /**
      * Toggle play/pause:
-     * @param isPlaying {Object}
+     * @param args {Object}
      */
     updateIsPlaying(args: {
         isPlaying: boolean;
@@ -56,5 +56,16 @@ export interface CapacitorMusicControlsPlugin {
      * @param dismissable {boolean}
      */
     updateDismissable(dismissable: boolean): void;
+    /**
+     * Add a listener for events from the native layer
+     * @param event {string} The event name
+     * @param callback {Function} The callback function to be called when the event fires
+     */
     addListener(event: string, callback: (info: any) => void): Promise<PluginListenerHandle>;
+    /**
+     * Update track metadata without recreating controls
+     * @param options {CapacitorMusicControlsInfo}
+     * @returns {Promise<any>}
+     */
+    updateMetadata(options: CapacitorMusicControlsInfo): Promise<any>;
 }
